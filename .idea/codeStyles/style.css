@@ -1,0 +1,48 @@
+td {
+    border: 2px solid black;
+    height: 100px;
+    width: 100px;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 70px;
+    cursor: pointer;
+}
+
+table {
+    border-collapse: collapse;
+    position: absolute;
+    left: 50%;
+    margin-left: -155px;
+    top: 50px;
+}
+
+.top td {
+    border-top: 0;
+}
+
+.bottom td {
+    border-bottom: 0;
+}
+
+tr .left {
+    border-left: 0;
+}
+
+tr .right {
+    border-right: 0;
+}
+
+.end {
+    display: none;
+    width: 200px;
+    top: 120px;
+    background-color: lavender;
+    position: absolute;
+    left: 50%;
+    margin-left: -100px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    text-align: center;
+    border-radius: 5px;
+    font-size: 30px;
+}
