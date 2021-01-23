@@ -29,6 +29,7 @@ function click(event) {
 }
 
 function turn(eventID, player) {
+    console.log(eventID);
     board[eventID] = player;
     document.getElementById(eventID).innerText = player;
     var win = check(board,player);
@@ -50,7 +51,6 @@ function check(board, player) {
         for(var j = 0; j < winCondition[i].length; j++) {
             if(moves.indexOf(winCondition[i][j]) > -1) {
                 count++;
-                console.log(count);
             }
         }
         if(count == winCondition[i].length) {
@@ -82,7 +82,7 @@ function finish(win) {
 }
 
 function tie() {
-    if(next() == -1) {
+    if(spaces().length == 0) {
         for(var i = 0; i < cells.length; i++) {
             cells[i].style.backgroundColor = "green";
             cells[i].removeEventListener("click", click, false);
@@ -93,16 +93,70 @@ function tie() {
     return false;
 }
 
-function next() {
+function spaces() {
+    var open = [];
     for(var i = 0; i < cells.length; i++) {
         if(typeof(board[i]) == "number") {
-            return board[i];
+            open.push(i)
         }
     }
-    return -1;
+    return open
+}
+
+function next() {
+    return minimax(board, ai).index;
 }
 
 function winner(player) {
     document.querySelector(".end").style.display = "block";
     document.querySelector(".end .winner").innerText = player;
+}
+
+function minimax(board, player) {
+    var open = spaces();
+    if(check(board, human)) {
+        return {score: -10};
+    }
+    else if(check(board, ai)) {
+        return {score: 10};
+    }
+    else if(open.length == 0) {
+        return {score: 0};
+    }
+    var moves = [];
+    for(var i = 0; i < open.length; i++) {
+        var move = {};
+        move.index = board[open[i]];
+        board[open[i]] = player;
+        if(player == ai) {
+            var result = minimax(board, human);
+            move.score = result.score;
+        }
+        else {
+            var result = minimax(board, ai);
+            move.score = result.score;
+        }
+        board[open[i]] = move.index;
+        moves.push(move);
+    }
+    var bestmove = 0;
+    if(player == ai){
+        var bestscore = -10000;
+        for(var i = 0; i < moves.length; i++) {
+            if(moves[i].score > bestscore) {
+                bestscore = moves[i].score;
+                bestmove = i;
+            }
+        }
+    }
+    else {
+        var bestscore = 10000;
+        for(var i = 0; i < moves.length; i++) {
+            if(moves[i].score < bestscore) {
+                bestscore = moves[i].score;
+                bestmove = i;
+            }
+        }
+    }
+    return moves[bestmove];
 }
